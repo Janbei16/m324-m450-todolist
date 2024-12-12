@@ -1,5 +1,5 @@
 /* eslint react/prop-types: 0 */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import styles from "./TodoItem.module.css";
 
@@ -23,7 +23,13 @@ const TodoItem = (props) => {
     textDecoration: "line-through",
   };
 
-  const { completed, id, title } = props.todo;
+  const priorityStyle = {
+    high: { color: "red" },
+    medium: { color: "orange" },
+    low: { color: "green" },
+  };
+
+  const { completed, id, title, priority } = props.todo;
 
   const viewMode = {};
   const editMode = {};
@@ -33,13 +39,6 @@ const TodoItem = (props) => {
   } else {
     editMode.display = "none";
   }
-
-  useEffect(
-    () => () => {
-      console.log("Cleaning up...");
-    },
-    []
-  );
 
   return (
     <li className={styles.item} data-type="todo-item">
@@ -58,6 +57,17 @@ const TodoItem = (props) => {
           <FaTrash style={{ color: "orangered", fontSize: "16px" }} />
         </button>
         <span style={completed ? completedStyle : null}>{title}</span>
+        <span style={priorityStyle[priority]}> ({priority})</span>
+        <select
+          name="priority"
+          value={priority}
+          onChange={(e) => props.updatePriority(id, e.target.value)}
+          className="priority-select"
+        >
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
       </div>
       <input
         type="text"
