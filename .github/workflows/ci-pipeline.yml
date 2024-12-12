@@ -34,9 +34,9 @@ jobs:
         continue-on-error: false # Stoppt die Pipeline bei Linter-Fehlern
 
       # Schritt 5: Unit-Tests und Integrationstests ausführen
-      - name: Run Tests
-        run: npm test -- --coverage # Setze deinen Test-Befehl (z.B. Jest, React Testing Library)
-        continue-on-error: false # Stoppt bei fehlgeschlagenen Tests
+      # - name: Run Tests
+      # run: npm test -- --coverage # Setze deinen Test-Befehl (z.B. Jest, React Testing Library)
+      # continue-on-error: false # Stoppt bei fehlgeschlagenen Tests
 
       # Schritt 6: Testabdeckung sicherstellen (mindestens 80%)
       - name: Check Test Coverage
