@@ -22,7 +22,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16" # Node.js Version einstellen (hier: 16)
+          node-version: "18" # Node.js Version auf 18 ändern, damit es mit Next.js kompatibel ist
 
       # Schritt 3: Installiere Abhängigkeiten
       - name: Install Dependencies
