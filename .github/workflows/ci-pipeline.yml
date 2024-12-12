@@ -68,6 +68,3 @@ jobs:
           fi
         env:
           API_KEY: ${{ secrets.API_KEY }} # Sichere Handhabung von sensiblen Daten
-
-    # Bei Fehlern eine spezifische Fehlermeldung ausgeben
-    fail-fast: true # Stoppt die Pipeline sofort bei einem Fehler
