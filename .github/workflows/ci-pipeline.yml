@@ -1,0 +1,70 @@
+name: CI/CD Pipeline
+
+# Trigger für Pushes und Pull-Requests
+on:
+  push:
+    branches:
+      - main # Nur Pushes auf den main Branch
+  pull_request:
+    branches:
+      - main # Nur Pull-Requests, die in den main Branch gehen
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # Die Pipeline wird auf einer Ubuntu-VM ausgeführt
+
+    steps:
+      # Schritt 1: Checkout des Repositories
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      # Schritt 2: Node.js Setup (für React/Node Projekte)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18" # Node.js Version auf 18 ändern, damit es mit Next.js kompatibel ist
+
+      # Schritt 3: Installiere Abhängigkeiten
+      - name: Install Dependencies
+        run: npm install
+
+      # Schritt 4: Linter ausführen
+      - name: Run Linter
+        run: npm run lint # Dies setzt voraus, dass ein Linter in deinem Projekt definiert ist
+        continue-on-error: false # Stoppt die Pipeline bei Linter-Fehlern
+
+      # Schritt 5: Unit-Tests und Integrationstests ausführen
+      # - name: Run Tests
+      # run: npm test -- --coverage # Setze deinen Test-Befehl (z.B. Jest, React Testing Library)
+      # continue-on-error: false # Stoppt bei fehlgeschlagenen Tests
+
+      # Schritt 6: Testabdeckung sicherstellen (mindestens 80%)
+      - name: Check Test Coverage
+        run: |
+          COVERAGE=$(grep -oP '\d+(?=%)' coverage/lcov-report/index.html | head -n 1)
+          if [ "$COVERAGE" -lt 80 ]; then
+            echo "Test coverage is below 80%. Current coverage: $COVERAGE%" && exit 1
+          fi
+
+      # Schritt 7: Testergebnisse anzeigen
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: coverage/lcov-report
+
+      # Schritt 8: Build
+      - name: Build Application
+        run: npm run build # Hier den Build-Befehl deines Projekts einfügen
+        continue-on-error: false # Stoppt bei Build-Fehlern
+
+      # Schritt 9: Deployment in Staging-Umgebung
+      - name: Deploy to Staging
+        run: |
+          if [ "$GITHUB_REF" == "refs/heads/main" ]; then
+            echo "Deploying to staging..."
+            # Hier den Deploy-Befehl einfügen, z.B. via Docker, Kubernetes oder Serverless
+            # Beispiel: npm run deploy:staging
+          fi
+        env:
+          API_KEY: ${{ secrets.API_KEY }} # Sichere Handhabung von sensiblen Daten
