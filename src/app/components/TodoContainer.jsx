@@ -39,11 +39,12 @@ const TodoContainer = () => {
     setTodos([...todos.filter((todo) => todo.id !== id)]);
   };
 
-  const addTodoItem = ({ title, priority }) => {
+  const addTodoItem = ({ title, priority, dueDate }) => {
     const newTodo = {
       id: uuidv4(),
       title,
       priority,
+      dueDate: dueDate || "",
       completed: false,
     };
     setTodos([...todos, newTodo]);
@@ -71,13 +72,21 @@ const TodoContainer = () => {
     );
   };
 
+  const isDueSoon = (dueDate) => {
+    if (!dueDate) return false;
+    const now = new Date();
+    const due = new Date(dueDate);
+    const difference = due - now;
+    return difference <= 24 * 60 * 60 * 1000 && difference > 0;
+  };
+
   const sortTodos = (todos) => {
     return [...todos].sort((a, b) => {
       const priorityOrder = { high: 1, medium: 2, low: 3 };
       if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
         return priorityOrder[a.priority] - priorityOrder[b.priority];
       }
-      return 0;
+      return new Date(a.dueDate) - new Date(b.dueDate);
     });
   };
 
@@ -96,6 +105,7 @@ const TodoContainer = () => {
         deleteTodoProps={delTodo}
         setUpdate={setUpdate}
         updatePriority={updatePriority}
+        isDueSoon={isDueSoon}
       />
     </div>
   );

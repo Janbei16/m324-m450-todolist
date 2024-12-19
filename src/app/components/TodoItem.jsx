@@ -29,7 +29,11 @@ const TodoItem = (props) => {
     low: { color: "green" },
   };
 
-  const { completed, id, title, priority } = props.todo;
+  const dueSoonStyle = {
+    color: "blue",
+  };
+
+  const { completed, id, title, priority, dueDate } = props.todo;
 
   const viewMode = {};
   const editMode = {};
@@ -58,6 +62,11 @@ const TodoItem = (props) => {
         </button>
         <span style={completed ? completedStyle : null}>{title}</span>
         <span style={priorityStyle[priority]}> ({priority})</span>
+        {dueDate && (
+          <span style={props.isDueSoon(dueDate) ? dueSoonStyle : null}>
+            {" "}- Due: {new Date(dueDate).toLocaleDateString("de-DE")}
+          </span>
+        )}
         <select
           name="priority"
           value={priority}

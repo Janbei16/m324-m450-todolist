@@ -6,6 +6,7 @@ const InputTodo = (props) => {
   const [inputText, setInputText] = useState({
     title: "",
     priority: "medium",
+    dueDate: ""
   });
 
   const onChange = (e) => {
@@ -22,6 +23,7 @@ const InputTodo = (props) => {
       setInputText({
         title: "",
         priority: "medium",
+        dueDate: ""
       });
     } else {
       alert("Please write item");
@@ -52,6 +54,13 @@ const InputTodo = (props) => {
         <option value="medium">Medium</option>
         <option value="low">Low</option>
       </select>
+      <input
+        type="date"
+        name="dueDate"
+        value={inputText.dueDate}
+        onChange={onChange}
+        className="date-input"
+      />
       <button data-set="add-todo-btn" className="input-submit">
         <FaPlusCircle />
       </button>
