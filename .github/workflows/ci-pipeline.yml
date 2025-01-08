@@ -25,9 +25,8 @@ jobs:
           node-version: "18" # Node.js Version auf 18 ändern, damit es mit Next.js kompatibel ist
 
       # Schritt 3: Installiere Abhängigkeiten
-      - name: Install Dependencies with Retry
-          run: |
-            npm install || npm install
+      - name: Install Dependencies
+        run: npm ci
 
       # Schritt 4: Linter ausführen
       - name: Run Linter
