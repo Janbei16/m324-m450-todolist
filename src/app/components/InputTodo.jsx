@@ -6,28 +6,39 @@ const InputTodo = (props) => {
   const [inputText, setInputText] = useState({
     title: "",
     priority: "medium",
-    dueDate: ""
+    dueDate: "",
   });
 
   const onChange = (e) => {
+    const { name, value } = e.target;
+    console.log(`Changing ${name}: ${value}`); // Debug log
     setInputText({
       ...inputText,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (inputText.title.trim()) {
-      props.addTodoProps(inputText);
-      setInputText({
-        title: "",
-        priority: "medium",
-        dueDate: ""
-      });
-    } else {
+    const now = new Date();
+    const dueDate = new Date(inputText.dueDate);
+
+    if (inputText.title.trim() === "") {
       alert("Please write item");
+      return;
     }
+
+    if (inputText.dueDate && dueDate < now) {
+      alert("The due date cannot be in the past");
+      return;
+    }
+
+    props.addTodoProps(inputText);
+    setInputText({
+      title: "",
+      priority: "medium",
+      dueDate: "",
+    });
   };
 
   return (
@@ -41,7 +52,7 @@ const InputTodo = (props) => {
         className="input-text"
         placeholder="Add todo..."
         value={inputText.title}
-        name="title"
+        name="title" // Ensure this matches state property
         onChange={onChange}
       />
       <select
@@ -56,12 +67,17 @@ const InputTodo = (props) => {
       </select>
       <input
         type="date"
-        name="dueDate"
+        name="dueDate" // Ensure this matches state property
         value={inputText.dueDate}
         onChange={onChange}
         className="date-input"
+        aria-label="Due date" // Added for accessibility
       />
-      <button data-set="add-todo-btn" className="input-submit">
+      <button
+        data-set="add-todo-btn"
+        className="input-submit"
+        aria-label="Add Todo"
+      >
         <FaPlusCircle />
       </button>
     </form>
