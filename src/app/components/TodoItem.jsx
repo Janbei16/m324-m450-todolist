@@ -64,7 +64,8 @@ const TodoItem = (props) => {
         <span style={priorityStyle[priority]}> ({priority})</span>
         {dueDate && (
           <span style={props.isDueSoon(dueDate) ? dueSoonStyle : null}>
-            {" "}- Due: {new Date(dueDate).toLocaleDateString("de-DE")}
+            {" "}
+            - Due: {new Date(dueDate).toLocaleDateString("de-DE")}
           </span>
         )}
         <select

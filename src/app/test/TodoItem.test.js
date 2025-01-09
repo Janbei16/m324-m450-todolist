@@ -45,9 +45,7 @@ describe("TodoItem Component", () => {
       id: 1,
       title: "Due Soon Task",
       priority: "medium",
-      dueDate: new Date(Date.now() + 23 * 60 * 60 * 1000)
-        .toISOString()
-        .split("T")[0], // Within 24 hours
+      dueDate: "2025-01-10", // Ensure this matches the rendered date
     };
 
     const isDueSoonMock = jest.fn((dueDate) => {
@@ -68,9 +66,9 @@ describe("TodoItem Component", () => {
       />
     );
 
-    const dueDateElement = screen.getByText((content) =>
-      content.includes("9.1.2025")
-    ); // Custom matcher to find the text
-    expect(dueDateElement).toHaveStyle("color: blue"); // Color for tasks due soon
+    screen.debug(); // Verify the DOM output if needed
+
+    const dueDateElement = screen.getByText(/10\.1\.2025/); // Match the rendered date
+    expect(dueDateElement).toHaveStyle("color: blue"); // Verify styling
   });
 });
